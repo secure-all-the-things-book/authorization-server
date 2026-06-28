@@ -4,6 +4,7 @@ create table if not exists users
     password varchar(500) not null,
     enabled  boolean      not null
 );
+
 create table if not exists authorities
 (
     username  varchar(200) not null,

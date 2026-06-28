@@ -4,6 +4,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
@@ -25,22 +26,29 @@ class ClientsConfiguration {
 
     //<2>
     @Bean
-    ApplicationRunner clientsRunner(RegisteredClientRepository repository) {
-        return args -> {
+    ApplicationRunner clientsRunner(PasswordEncoder pwe,
+                                    RegisteredClientRepository repository) {
+        return _ -> {
             var clientId = "crm";
             if (repository.findByClientId(clientId) == null) {
+                var crmClientSecret = pwe.encode("crm");
                 repository.save(
                         RegisteredClient
                                 .withId(UUID.randomUUID().toString())
                                 .clientId(clientId)
-                                .clientSecret("{bcrypt}$2a$10$m7dGi0viwVH63EjwZc6UdeUQxPuiVEEdFbZFI9nMxHAASTOIDlaVO")
+                                // you should get this from an environment variable!
+                                .clientSecret(crmClientSecret) // <.>
                                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                                 .authorizationGrantTypes(grantTypes -> grantTypes.addAll(Set.of(
                                         AuthorizationGrantType.CLIENT_CREDENTIALS,
                                         AuthorizationGrantType.AUTHORIZATION_CODE,
-                                        AuthorizationGrantType.REFRESH_TOKEN)))
-                                .redirectUri("http://127.0.0.1:8082/login/oauth2/code/spring")
-                                .scopes(scopes -> scopes.addAll(Set.of("user.read", "user.write", OidcScopes.OPENID)))
+                                        AuthorizationGrantType.REFRESH_TOKEN,
+                                        AuthorizationGrantType.DEVICE_CODE
+                                )))
+                                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/crm")
+                                .scopes(scopes -> scopes.addAll(Set.of("user.read", "user.write",
+                                        OidcScopes.PROFILE ,OidcScopes.EMAIL ,
+                                        OidcScopes.OPENID)))
                                 .build()
                 );
             }

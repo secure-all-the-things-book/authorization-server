@@ -25,7 +25,8 @@ class UsersConfiguration {
             // <1>
             var builder = User.builder().roles("USER").passwordEncoder(passwordEncoder::encode);
             // <2>
-            var users = Map.of("jlong", "password", "rwinch", "p@ssw0rd");
+            var users = Map.of("josh@joshlong.com", "pw",
+                    "user@anotherone.site", "p@ssw0rd");
             users.forEach((username, password) -> {
                 if (!userDetailsManager.userExists(username)) {
                     var user = builder
