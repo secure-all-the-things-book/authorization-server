@@ -13,8 +13,8 @@ class UserDetailsConfiguration {
     UserDetailsService inMemoryUserDetailsManager() {
         var userBuilder = User.withDefaultPasswordEncoder();
         return new InMemoryUserDetailsManager(
-                userBuilder.roles("USER").username("jlong").password("password").build(),
-                userBuilder.roles("USER", "ADMIN").username("rwinch").password("p@ssw0rd").build()
+                userBuilder.roles("USER").username("josh@joshlong.com").password("pw").build(),
+                userBuilder.roles("USER", "ADMIN").username("rob@spring.security").password("p@ssw0rd").build()
         );
     }
 
