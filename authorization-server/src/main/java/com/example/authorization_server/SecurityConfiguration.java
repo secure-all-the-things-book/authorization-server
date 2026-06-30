@@ -17,9 +17,10 @@ import java.security.interfaces.RSAPublicKey;
 @Configuration
 class SecurityConfiguration {
 
-    // <1>
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
+	// <1>
+	@Bean
+	PasswordEncoder passwordEncoder() {
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	}
+
 }

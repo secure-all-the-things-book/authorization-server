@@ -12,20 +12,21 @@ import java.time.Instant;
 @Configuration
 class LifecycleConfiguration {
 
-    // <.>
-    @Bean
-    ApplicationListener<RsaKeyPairGenerationRequestEvent> keyPairGenerationRequestListener(
-            Keys keys, RsaKeyPairRepository repository, @Value("${jwk.key.id}") String keyId) {
-        return event -> repository.save(keys.generateKeyPair(keyId, event.getSource()));
-    }
+	// <.>
+	@Bean
+	ApplicationListener<RsaKeyPairGenerationRequestEvent> keyPairGenerationRequestListener(Keys keys,
+			RsaKeyPairRepository repository, @Value("${jwk.key.id}") String keyId) {
+		return event -> repository.save(keys.generateKeyPair(keyId, event.getSource()));
+	}
 
-    // <.>
-    @Bean
-    ApplicationListener<ApplicationReadyEvent> applicationReadyListener(
-            ApplicationEventPublisher publisher, RsaKeyPairRepository repository) {
-        return event -> {
-            if (repository.findKeyPairs().isEmpty())
-                publisher.publishEvent(new RsaKeyPairGenerationRequestEvent(Instant.now()));
-        };
-    }
+	// <.>
+	@Bean
+	ApplicationListener<ApplicationReadyEvent> applicationReadyListener(ApplicationEventPublisher publisher,
+			RsaKeyPairRepository repository) {
+		return event -> {
+			if (repository.findKeyPairs().isEmpty())
+				publisher.publishEvent(new RsaKeyPairGenerationRequestEvent(Instant.now()));
+		};
+	}
+
 }
