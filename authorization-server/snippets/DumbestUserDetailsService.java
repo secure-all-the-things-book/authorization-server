@@ -15,7 +15,7 @@ class DumbestUserDetailsService implements UserDetailsService {
 
     private final Map<String, UserDetails> users;
 
-    DumbestUserDetailsService( Set <UserDetails> userDetails) {
+    DumbestUserDetailsService(Set<UserDetails> userDetails) {
         var map = userDetails
                 .stream()
                 .collect(Collectors.toMap(UserDetails::getUsername, ud -> ud));

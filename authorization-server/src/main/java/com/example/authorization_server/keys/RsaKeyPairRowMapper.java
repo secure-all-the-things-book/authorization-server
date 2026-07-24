@@ -21,6 +21,11 @@ class RsaKeyPairRowMapper implements RowMapper<RsaKeyPair> {
 		this.rsaPublicKeyConverter = rsaPublicKeyConverter;
 	}
 
+	private static <T> T loadKey(ResultSet rs, String fn, Deserializer<T> f) throws SQLException, IOException {
+		var privateKeyBytes = rs.getString(fn).getBytes();
+		return f.deserializeFromByteArray(privateKeyBytes);
+	}
+
 	@Override
 	public RsaKeyPair mapRow(ResultSet rs, int rowNum) throws SQLException {
 		try {
@@ -39,11 +44,6 @@ class RsaKeyPairRowMapper implements RowMapper<RsaKeyPair> {
 		catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	private static <T> T loadKey(ResultSet rs, String fn, Deserializer<T> f) throws SQLException, IOException {
-		var privateKeyBytes = rs.getString(fn).getBytes();
-		return f.deserializeFromByteArray(privateKeyBytes);
 	}
 
 }

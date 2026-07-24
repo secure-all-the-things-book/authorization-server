@@ -4,5 +4,5 @@ create table if not exists rsa_key_pairs
     private_key text          not null,
     public_key  text          not null,
     created     date          not null,
-    unique (id, created )
+    unique (id, created)
 );
