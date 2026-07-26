@@ -2,11 +2,13 @@ package com.example.authorization_server;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 
+@Profile("authorizationjdbc")
 @Configuration
 class AuthorizationConfiguration {
 

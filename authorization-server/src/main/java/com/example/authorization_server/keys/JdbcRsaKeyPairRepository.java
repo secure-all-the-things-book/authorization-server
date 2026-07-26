@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-@Component
+// todo convert the JdbcTemplate to use the JdbcClient
 class JdbcRsaKeyPairRepository implements RsaKeyPairRepository {
 
 	private final JdbcTemplate jdbc;
