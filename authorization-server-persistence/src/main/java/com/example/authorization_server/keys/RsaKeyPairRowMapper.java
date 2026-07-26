@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
-
 class RsaKeyPairRowMapper implements RowMapper<RsaKeyPair> {
 
 	private final RsaPrivateKeyConverter rsaPrivateKeyConverter;
