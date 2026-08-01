@@ -8,9 +8,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 @Configuration
 class SecurityConfiguration {
 
-    @Bean
-    Customizer<HttpSecurity> httpSecurityCustomizer() {
-        return http -> http
-                .oauth2AuthorizationServer(a -> a.oidc(Customizer.withDefaults()));
-    }
+	@Bean
+	Customizer<HttpSecurity> httpSecurityCustomizer() {
+		return http -> http
+			// <.>
+			.oauth2AuthorizationServer(a -> a.oidc(Customizer.withDefaults()));
+	}
+
 }

@@ -13,31 +13,27 @@ import java.util.List;
 @Configuration
 class UsersConfiguration {
 
-    @Bean
-    ApplicationRunner runner(PasswordEncoder passwordEncoder) {
-        return a -> IO.println(passwordEncoder.encode("spring"));
-    }
+	@Bean
+	PasswordEncoder passwordEncoder() {
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	}
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
+	@Bean
+	InMemoryUserDetailsManager userDetailsManager(PasswordEncoder passwordEncoder) {
+		var josh = User //
+			.builder()//
+			.username("josh@joshlong.com") //
+			.roles("USER")//
+			.password(passwordEncoder.encode("pw"))//
+			.build();
+		var rob = User //
+			.builder()//
+			.username("rob@spring.security") //
+			.roles("USER", "ADMIN")//
+			.password(passwordEncoder.encode("pw"))//
+			.build();
+		var userDetails = List.of(rob, josh);
+		return new InMemoryUserDetailsManager(userDetails);
+	}
 
-    @Bean
-    InMemoryUserDetailsManager userDetailsManager(PasswordEncoder passwordEncoder) {
-        var josh = User //
-                .builder()//
-                .username("josh@joshlong.com") //
-                .roles("USER")//
-                .password(passwordEncoder.encode("pw"))//
-                .build();
-        var rob = User //
-                .builder()//
-                .username("rob@spring.security") //
-                .roles("USER", "ADMIN")//
-                .password(passwordEncoder.encode("pw"))//
-                .build();
-        var userDetails = List.of(rob, josh);
-        return new InMemoryUserDetailsManager(userDetails);
-    }
 }
