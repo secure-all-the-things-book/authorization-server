@@ -31,21 +31,23 @@ class ClientsConfiguration {
 			var clientId = "spring";
 			if (repository.findByClientId(clientId) == null) {
 				var crmClientSecret = pwe.encode("spring");
+				var authorizationGrantTypes = Set.of( //
+						AuthorizationGrantType.CLIENT_CREDENTIALS, //
+						AuthorizationGrantType.AUTHORIZATION_CODE, //
+						AuthorizationGrantType.REFRESH_TOKEN, //
+						AuthorizationGrantType.DEVICE_CODE //
+				); //
+				var scopes = Set.of(OidcScopes.OPENID, OidcScopes.PROFILE, //
+						OidcScopes.EMAIL, "user.write", "user.read");
 				var client = RegisteredClient//
 						.withId(UUID.randomUUID().toString())//
 						.clientId(clientId)//
 						.clientSecret(crmClientSecret) // <.>
 						.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)//
 						.authorizationGrantTypes(
-								grantTypes -> grantTypes.addAll(Set.of(AuthorizationGrantType.CLIENT_CREDENTIALS, //
-										AuthorizationGrantType.AUTHORIZATION_CODE, //
-										AuthorizationGrantType.REFRESH_TOKEN, //
-										AuthorizationGrantType.DEVICE_CODE //
-								)))//
+								grantTypes -> grantTypes.addAll(authorizationGrantTypes))//
 						.redirectUri("http://127.0.0.1:8080/login/oauth2/code/spring") //
-						.scopes(scopes -> scopes.addAll( //
-								Set.of(OidcScopes.OPENID, OidcScopes.PROFILE, //
-										OidcScopes.EMAIL, "user.write", "user.read")))
+						.scopes(existingScopes -> existingScopes.addAll( scopes))
 						.build();
 				repository.save(client);
 			}
