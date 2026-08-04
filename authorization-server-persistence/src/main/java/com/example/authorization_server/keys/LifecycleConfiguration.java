@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Profile;
 
 import java.time.Instant;
 
-@Profile("keys")
 @Configuration
 class LifecycleConfiguration {
 

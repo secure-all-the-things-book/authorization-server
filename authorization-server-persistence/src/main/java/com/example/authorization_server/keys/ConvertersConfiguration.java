@@ -4,16 +4,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 
-@Profile("keys")
 @Configuration
 class ConvertersConfiguration {
 
 	@Bean
 	JdbcRsaKeyPairRepository jdbcRsaKeyPairRepository(RsaKeyPairRowMapper rsaKeyPairRowMapper,
 			RsaPublicKeyConverter rsaPublicKeyConverter, RsaPrivateKeyConverter rsaPrivateKeyConverter,
-			JdbcTemplate template) {
+			JdbcClient template) {
 		return new JdbcRsaKeyPairRepository(rsaKeyPairRowMapper, rsaPublicKeyConverter, rsaPrivateKeyConverter,
 				template);
 	}

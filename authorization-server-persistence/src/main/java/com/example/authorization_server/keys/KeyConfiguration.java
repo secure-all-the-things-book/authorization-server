@@ -13,7 +13,6 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.authorization.token.*;
 
-@Profile("keys")
 @Configuration
 class KeyConfiguration {
 
