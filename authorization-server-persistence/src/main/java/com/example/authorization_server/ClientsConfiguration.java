@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 
 import java.util.Set;
 import java.util.UUID;
@@ -43,10 +44,15 @@ class ClientsConfiguration {
 					.withId(UUID.randomUUID().toString())//
 					.clientId(clientId)//
 					.clientSecret(crmClientSecret) // <.>
-					.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)//
-					.authorizationGrantTypes(grantTypes -> grantTypes.addAll(authorizationGrantTypes))//
+					.clientAuthenticationMethod( //
+							ClientAuthenticationMethod.CLIENT_SECRET_BASIC)//
+					.authorizationGrantTypes(gts -> gts.addAll(authorizationGrantTypes))//
 					.redirectUri("http://127.0.0.1:8080/login/oauth2/code/spring") //
-					.scopes(existingScopes -> existingScopes.addAll(scopes))
+					.scopes(s -> s.addAll(scopes))//
+					.clientSettings(ClientSettings.builder()//
+						.requireAuthorizationConsent(true) // <.>
+						.build() //
+				)
 					.build();
 				repository.save(client);
 			}
