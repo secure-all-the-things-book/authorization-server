@@ -3,7 +3,6 @@ package com.example.authorization_server;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -16,13 +15,12 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import java.util.Set;
 import java.util.UUID;
 
-@Profile("clientsjdbc")
 @Configuration
 class ClientsConfiguration {
 
 	// <1>
-	// @Bean
-	RegisteredClientRepository registeredClientRepository(JdbcTemplate template) {
+	@Bean
+	JdbcRegisteredClientRepository registeredClientRepository(JdbcTemplate template) {
 		return new JdbcRegisteredClientRepository(template);
 	}
 
@@ -30,20 +28,19 @@ class ClientsConfiguration {
 	@Bean
 	ApplicationRunner clientsRunner(PasswordEncoder pwe, RegisteredClientRepository repository) {
 		return _ -> {
-			var clientId = "crm";
+			var clientId = "spring";
 			if (repository.findByClientId(clientId) == null) {
-				var crmClientSecret = pwe.encode("crm");
+				var crmClientSecret = pwe.encode("spring");
 				repository.save(RegisteredClient.withId(UUID.randomUUID().toString())
 					.clientId(clientId)
-					// you should get this from an environment variable!
 					.clientSecret(crmClientSecret) // <.>
 					.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
 					.authorizationGrantTypes(grantTypes -> grantTypes.addAll(
 							Set.of(AuthorizationGrantType.CLIENT_CREDENTIALS, AuthorizationGrantType.AUTHORIZATION_CODE,
 									AuthorizationGrantType.REFRESH_TOKEN, AuthorizationGrantType.DEVICE_CODE)))
-					.redirectUri("http://127.0.0.1:8080/login/oauth2/code/crm")
+					.redirectUri("http://127.0.0.1:8080/login/oauth2/code/spring")
 					.scopes(scopes -> scopes.addAll(
-							Set.of("user.read", "user.write", OidcScopes.PROFILE, OidcScopes.EMAIL, OidcScopes.OPENID)))
+							Set.of(OidcScopes.OPENID, OidcScopes.PROFILE, OidcScopes.EMAIL, "user.write", "user.read")))
 					.build());
 			}
 		};
