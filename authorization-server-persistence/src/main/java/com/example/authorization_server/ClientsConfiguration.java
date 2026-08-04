@@ -26,11 +26,11 @@ class ClientsConfiguration {
 
 	// <2>
 	@Bean
-	ApplicationRunner clientsRunner(PasswordEncoder pwe, RegisteredClientRepository repository) {
+	ApplicationRunner clientsRunner(PasswordEncoder passwordEncoder, RegisteredClientRepository repository) {
 		return _ -> {
 			var clientId = "spring";
 			if (repository.findByClientId(clientId) == null) {
-				var crmClientSecret = pwe.encode("spring");
+				var crmClientSecret = passwordEncoder.encode("spring");
 				var authorizationGrantTypes = Set.of( //
 						AuthorizationGrantType.CLIENT_CREDENTIALS, //
 						AuthorizationGrantType.AUTHORIZATION_CODE, //
@@ -40,15 +40,14 @@ class ClientsConfiguration {
 				var scopes = Set.of(OidcScopes.OPENID, OidcScopes.PROFILE, //
 						OidcScopes.EMAIL, "user.write", "user.read");
 				var client = RegisteredClient//
-						.withId(UUID.randomUUID().toString())//
-						.clientId(clientId)//
-						.clientSecret(crmClientSecret) // <.>
-						.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)//
-						.authorizationGrantTypes(
-								grantTypes -> grantTypes.addAll(authorizationGrantTypes))//
-						.redirectUri("http://127.0.0.1:8080/login/oauth2/code/spring") //
-						.scopes(existingScopes -> existingScopes.addAll( scopes))
-						.build();
+					.withId(UUID.randomUUID().toString())//
+					.clientId(clientId)//
+					.clientSecret(crmClientSecret) // <.>
+					.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)//
+					.authorizationGrantTypes(grantTypes -> grantTypes.addAll(authorizationGrantTypes))//
+					.redirectUri("http://127.0.0.1:8080/login/oauth2/code/spring") //
+					.scopes(existingScopes -> existingScopes.addAll(scopes))
+					.build();
 				repository.save(client);
 			}
 		};
