@@ -35,12 +35,16 @@ class ClientsConfiguration {
 					.clientId(clientId)
 					.clientSecret(crmClientSecret) // <.>
 					.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-					.authorizationGrantTypes(grantTypes -> grantTypes.addAll(
-							Set.of(AuthorizationGrantType.CLIENT_CREDENTIALS, AuthorizationGrantType.AUTHORIZATION_CODE,
-									AuthorizationGrantType.REFRESH_TOKEN, AuthorizationGrantType.DEVICE_CODE)))
+					.authorizationGrantTypes(
+							grantTypes -> grantTypes.addAll(Set.of(AuthorizationGrantType.CLIENT_CREDENTIALS, //
+									AuthorizationGrantType.AUTHORIZATION_CODE, //
+									AuthorizationGrantType.REFRESH_TOKEN, //
+									AuthorizationGrantType.DEVICE_CODE //
+				)))
 					.redirectUri("http://127.0.0.1:8080/login/oauth2/code/spring")
-					.scopes(scopes -> scopes.addAll(
-							Set.of(OidcScopes.OPENID, OidcScopes.PROFILE, OidcScopes.EMAIL, "user.write", "user.read")))
+					.scopes(scopes -> scopes.addAll( //
+							Set.of(OidcScopes.OPENID, OidcScopes.PROFILE, //
+									OidcScopes.EMAIL, "user.write", "user.read")))
 					.build());
 			}
 		};
